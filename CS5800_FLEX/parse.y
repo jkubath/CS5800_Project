@@ -19,9 +19,10 @@ commands:
 	commands command
 	;
 
+
 command:
-	add
-	|
+	add 
+	| 
 	sub
 	;
 
@@ -41,4 +42,4 @@ sub:
 
 %%
 
-
+int main() { yyparse(); }

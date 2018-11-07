@@ -441,14 +441,12 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "test.l"
-#line 2 "test.l"
+#line 1 "calc.l"
+#line 2 "calc.l"
 	#include <stdio.h>
 	#include "parse.tab.h"
-
-	extern int yylval;
-#line 451 "lex.yy.c"
-#line 452 "lex.yy.c"
+#line 449 "lex.yy.c"
+#line 450 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -665,9 +663,9 @@ YY_DECL
 		}
 
 	{
-#line 8 "test.l"
+#line 6 "calc.l"
 
-#line 671 "lex.yy.c"
+#line 669 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -726,30 +724,30 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 9 "test.l"
-printf("Add\n"); return ADD;
+#line 7 "calc.l"
+return ADD;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 10 "test.l"
-printf("SUB\n"); return SUB;
+#line 8 "calc.l"
+return SUB;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 11 "test.l"
-yylval=atoi(yytext); printf("%d\n", yylval); return NUMBER;
+#line 9 "calc.l"
+yylval=atoi(yytext); return NUMBER;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 12 "test.l"
+#line 10 "calc.l"
 printf("Word\n");
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 13 "test.l"
+#line 11 "calc.l"
 ECHO;
 	YY_BREAK
-#line 753 "lex.yy.c"
+#line 751 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1754,5 +1752,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 13 "test.l"
+#line 11 "calc.l"
 

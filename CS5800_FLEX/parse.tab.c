@@ -429,7 +429,7 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    16,    16,    19,    23,    25,    29,    36
+       0,    16,    16,    19,    24,    26,    30,    37
 };
 #endif
 
@@ -1198,7 +1198,7 @@ yyreduce:
   switch (yyn)
     {
         case 6:
-#line 30 "parse.y" /* yacc.c:1646  */
+#line 31 "parse.y" /* yacc.c:1646  */
     {
 		printf("%d\n", ((yyvsp[-2]) + (yyvsp[0])));
 	}
@@ -1206,7 +1206,7 @@ yyreduce:
     break;
 
   case 7:
-#line 37 "parse.y" /* yacc.c:1646  */
+#line 38 "parse.y" /* yacc.c:1646  */
     {
 		printf("%d\n", ((yyvsp[-2]) - (yyvsp[0])));
 	}
@@ -1442,7 +1442,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 42 "parse.y" /* yacc.c:1906  */
+#line 43 "parse.y" /* yacc.c:1906  */
 
 
-
+int main() { yyparse(); }

@@ -1,0 +1,3 @@
+Setup for using BISON and LEX
+
+sudo apt-get install bison flex
