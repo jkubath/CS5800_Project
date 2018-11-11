@@ -34,7 +34,7 @@
 # define YY_YY_PARSE_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -45,9 +45,20 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NUMBER = 258,
-    ADD = 259,
-    SUB = 260
+    EQUALS = 258,
+    NUMBER = 259,
+    POWER = 260,
+    EOLN = 261,
+    MODULO = 262,
+    SIN = 263,
+    COS = 264,
+    TAN = 265,
+    DERIV = 266,
+    PLUS = 267,
+    MINUS = 268,
+    MULTIPLY = 269,
+    DIVIDE = 270,
+    NOT = 271
   };
 #endif
 
