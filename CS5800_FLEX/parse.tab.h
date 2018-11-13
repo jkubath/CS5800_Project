@@ -54,11 +54,14 @@ extern int yydebug;
     COS = 264,
     TAN = 265,
     DERIV = 266,
-    PLUS = 267,
-    MINUS = 268,
-    MULTIPLY = 269,
-    DIVIDE = 270,
-    NOT = 271
+    STRING = 267,
+    LEFT_B = 268,
+    RIGHT_B = 269,
+    PLUS = 270,
+    MINUS = 271,
+    MULTIPLY = 272,
+    DIVIDE = 273,
+    NOT = 274
   };
 #endif
 

@@ -1,15 +1,21 @@
 %{
-	#define YYSTYPE double
+
+	struct data_s {
+		char * s;
+		double num;
+	} YYSTYPE;
+
+	#define YYSTYPE struct data_s
+	
 	#include <stdio.h>
 	#include "parse.tab.h"
 	#include <math.h>
 
-
-	extern double yylval;
+	extern YYSTYPE yylval;
 %}
 
 %% 
-[ \t] { ; }
+[ \t] 	{ ; }
 "+"     return PLUS;
 "-"     return MINUS;
 "*" 	return MULTIPLY;
@@ -19,8 +25,10 @@
 "sin"	return SIN;
 "cos"	return COS;
 "tan"	return TAN;
-"dx" printf("Derivative");
-[0-9.]+ { sscanf( yytext, "%lf", &yylval ); return NUMBER ; }
-[a-zA-Z0-9.]+ { return DERIV; }
+"("		return LEFT_B;
+")"		return RIGHT_B;
+"d"[a-z] 	{ yylval.s = calloc( 1, sizeof(char)); yylval.s[0] = yytext[1]; return DERIV; }
+[0-9.]+ { sscanf( yytext, "%lf", &(yylval.num) ); return NUMBER; }
+[a-zA-Z0-9.^+\-*\/ ]+ { yylval.s = calloc(strlen(yytext)+1, sizeof(char)); strcpy(yylval.s, yytext); return STRING; }
 "\n" 	return EOLN;
 %%
