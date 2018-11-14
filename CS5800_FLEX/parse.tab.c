@@ -88,7 +88,8 @@ struct data_s {
 #include <math.h>
 
 double calcMod(double a,double b);
-void derivative(char * s);
+void derivative(char * s, char ref);
+void functionDeriv(char * s, char * function, char ref);
 
 int yylex();
 
@@ -99,7 +100,7 @@ void yyerror(const char *s) {
 char resultString[1024];
 
 
-#line 103 "parse.tab.c" /* yacc.c:339  */
+#line 104 "parse.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -170,7 +171,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 174 "parse.tab.c" /* yacc.c:358  */
+#line 175 "parse.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -412,16 +413,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   41
+#define YYLAST   57
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  20
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  9
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  23
+#define YYNRULES  25
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  44
+#define YYNSTATES  58
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -469,9 +470,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    45,    45,    48,    50,    59,    62,    63,    64,    66,
-      67,    68,    69,    71,    72,    76,    77,    80,    82,    84,
-      86,    88,    90,    94
+       0,    46,    46,    49,    51,    60,    63,    64,    65,    67,
+      68,    69,    70,    72,    73,    77,    78,    81,    83,    85,
+      87,    91,    93,    95,    97,    99
 };
 #endif
 
@@ -484,7 +485,7 @@ static const char *const yytname[] =
   "MODULO", "SIN", "COS", "TAN", "DERIV", "STRING", "LEFT_B", "RIGHT_B",
   "PLUS", "MINUS", "MULTIPLY", "DIVIDE", "NOT", "$accept", "commands",
   "exp", "add_sub", "mult_div", "power", "primary", "function",
-  "errorString", YY_NULLPTR
+  "derivative", YY_NULLPTR
 };
 #endif
 
@@ -498,10 +499,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -15
+#define YYPACT_NINF -13
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-15)))
+  (!!((Yystate) == (-13)))
 
 #define YYTABLE_NINF -1
 
@@ -512,11 +513,12 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -15,     0,   -15,   -15,   -15,    -8,    -6,    15,    16,   -15,
-      24,   -14,    -4,    26,   -15,   -15,   -15,    28,    29,    30,
-      12,   -15,    11,    11,    11,    11,    11,    11,    21,    22,
-      23,    25,    27,    -4,    -4,    26,    26,    26,   -15,   -15,
-     -15,   -15,   -15,   -15
+     -13,     0,   -13,   -13,   -13,   -12,   -10,    -6,    16,    -1,
+       8,    -5,    27,   -13,   -13,   -13,    29,    30,    31,    10,
+     -13,    17,    17,    17,    17,    17,    17,    22,    23,    24,
+      25,    28,    32,    33,    26,    -5,    -5,    27,    27,    27,
+     -13,   -13,   -13,   -13,   -13,    35,    36,    37,   -13,    38,
+      39,    40,    41,    42,    43,   -13,   -13,   -13
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -524,23 +526,24 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,    15,     3,     0,     0,     0,     0,    23,
-       0,     5,     6,     9,    13,    16,    17,     0,     0,     0,
-       0,     4,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     7,     8,    12,    10,    11,    14,    18,
-      19,    20,    22,    21
+       2,     0,     1,    15,     3,     0,     0,     0,     0,     0,
+       5,     6,     9,    13,    16,    17,     0,     0,     0,     0,
+       4,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     7,     8,    12,    10,    11,
+      14,    18,    19,    20,    25,     0,     0,     0,    24,     0,
+       0,     0,     0,     0,     0,    21,    22,    23
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -15,   -15,   -15,   -15,    -5,     1,    13,   -15,   -15
+     -13,   -13,   -13,   -13,     9,    -8,    18,   -13,   -13
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,    10,    11,    12,    13,    14,    15,    16
+      -1,     1,     9,    10,    11,    12,    13,    14,    15
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -548,31 +551,34 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,    22,    23,    24,     3,    17,     4,    18,     5,     6,
-       7,     8,     9,    25,    26,     3,    31,    33,    34,     5,
-       6,     7,     8,     9,    32,    35,    36,    37,    19,    20,
-      21,    27,    28,    29,    30,    39,    40,    41,     0,    42,
-      38,    43
+       2,    16,    23,    17,     3,    20,     4,    18,     5,     6,
+       7,     8,    24,    25,    30,    37,    38,    39,    31,    32,
+      33,     3,    34,    21,    22,     5,     6,     7,     8,    19,
+      35,    36,    26,    27,    28,    29,    41,    42,    43,    44,
+      48,    45,     0,     0,    40,    46,    47,    49,    50,    51,
+       0,     0,    52,    53,    54,    55,    56,    57
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,    15,    16,     7,     4,    13,     6,    13,     8,     9,
-      10,    11,    12,    17,    18,     4,     4,    22,    23,     8,
-       9,    10,    11,    12,    12,    24,    25,    26,    13,    13,
-       6,     5,     4,     4,     4,    14,    14,    14,    -1,    14,
-      27,    14
+       0,    13,     7,    13,     4,     6,     6,    13,     8,     9,
+      10,    11,    17,    18,     4,    23,    24,    25,     8,     9,
+      10,     4,    12,    15,    16,     8,     9,    10,    11,    13,
+      21,    22,     5,     4,     4,     4,    14,    14,    14,    14,
+      14,    13,    -1,    -1,    26,    13,    13,    12,    12,    12,
+      -1,    -1,    14,    14,    14,    14,    14,    14
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    21,     0,     4,     6,     8,     9,    10,    11,    12,
-      22,    23,    24,    25,    26,    27,    28,    13,    13,    13,
-      13,     6,    15,    16,     7,    17,    18,     5,     4,     4,
-       4,     4,    12,    24,    24,    25,    25,    25,    26,    14,
-      14,    14,    14,    14
+       0,    21,     0,     4,     6,     8,     9,    10,    11,    22,
+      23,    24,    25,    26,    27,    28,    13,    13,    13,    13,
+       6,    15,    16,     7,    17,    18,     5,     4,     4,     4,
+       4,     8,     9,    10,    12,    24,    24,    25,    25,    25,
+      26,    14,    14,    14,    14,    13,    13,    13,    14,    12,
+      12,    12,    14,    14,    14,    14,    14,    14
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -580,7 +586,7 @@ static const yytype_uint8 yyr1[] =
 {
        0,    20,    21,    21,    21,    22,    23,    23,    23,    24,
       24,    24,    24,    25,    25,    26,    26,    27,    27,    27,
-      27,    27,    27,    28
+      27,    28,    28,    28,    28,    28
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -588,7 +594,7 @@ static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     2,     3,     1,     1,     3,     3,     1,
        3,     3,     3,     1,     3,     1,     1,     1,     4,     4,
-       4,     4,     4,     1
+       4,     7,     7,     7,     4,     4
 };
 
 
@@ -1265,96 +1271,108 @@ yyreduce:
   switch (yyn)
     {
         case 4:
-#line 51 "parse.y" /* yacc.c:1646  */
+#line 52 "parse.y" /* yacc.c:1646  */
     { 
 		if((yyvsp[-1]).s != NULL) {
 			printf("\t= %s\n", (yyvsp[-1]).s);
 		}
 		else
 			printf("\t= %g\n", (yyvsp[-1]).num); return 0;}
-#line 1276 "parse.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 7:
-#line 63 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = (yyvsp[-2]).num + (yyvsp[0]).num; }
 #line 1282 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 8:
+  case 7:
 #line 64 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = (yyvsp[-2]).num - (yyvsp[0]).num; }
+    { (yyval).num = (yyvsp[-2]).num + (yyvsp[0]).num; }
 #line 1288 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 10:
-#line 67 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = (yyvsp[-2]).num * (yyvsp[0]).num; }
+  case 8:
+#line 65 "parse.y" /* yacc.c:1646  */
+    { (yyval).num = (yyvsp[-2]).num - (yyvsp[0]).num; }
 #line 1294 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 11:
+  case 10:
 #line 68 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = (yyvsp[-2]).num / (yyvsp[0]).num; }
+    { (yyval).num = (yyvsp[-2]).num * (yyvsp[0]).num; }
 #line 1300 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 12:
+  case 11:
 #line 69 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = calcMod((yyvsp[-2]).num, (yyvsp[0]).num); }
+    { (yyval).num = (yyvsp[-2]).num / (yyvsp[0]).num; }
 #line 1306 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 14:
-#line 72 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = pow((yyvsp[-2]).num, (yyvsp[0]).num); }
+  case 12:
+#line 70 "parse.y" /* yacc.c:1646  */
+    { (yyval).num = calcMod((yyvsp[-2]).num, (yyvsp[0]).num); }
 #line 1312 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 15:
-#line 76 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = (yyvsp[0]).num;}
+  case 14:
+#line 73 "parse.y" /* yacc.c:1646  */
+    { (yyval).num = pow((yyvsp[-2]).num, (yyvsp[0]).num); }
 #line 1318 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 18:
-#line 82 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = sinf((yyvsp[-1]).num);}
+  case 15:
+#line 77 "parse.y" /* yacc.c:1646  */
+    { (yyval).num = (yyvsp[0]).num;}
 #line 1324 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 19:
-#line 84 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = cosf((yyvsp[-1]).num);}
+  case 18:
+#line 83 "parse.y" /* yacc.c:1646  */
+    { (yyval).num = sinf((yyvsp[-1]).num);}
 #line 1330 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 20:
-#line 86 "parse.y" /* yacc.c:1646  */
-    { (yyval).num = tanf((yyvsp[-1]).num);}
+  case 19:
+#line 85 "parse.y" /* yacc.c:1646  */
+    { (yyval).num = cosf((yyvsp[-1]).num);}
 #line 1336 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 21:
-#line 88 "parse.y" /* yacc.c:1646  */
-    { derivative((yyvsp[-1]).s); (yyval).s = resultString; }
+  case 20:
+#line 87 "parse.y" /* yacc.c:1646  */
+    { (yyval).num = tanf((yyvsp[-1]).num);}
 #line 1342 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 22:
-#line 90 "parse.y" /* yacc.c:1646  */
-    { (yyval).s = "0"; }
+  case 21:
+#line 91 "parse.y" /* yacc.c:1646  */
+    { functionDeriv((yyvsp[-2]).s, "sin", (yyvsp[-6]).s[0]); (yyval).s = resultString; }
 #line 1348 "parse.tab.c" /* yacc.c:1646  */
     break;
 
-  case 23:
-#line 94 "parse.y" /* yacc.c:1646  */
-    {printf("Error - %s\n", (yyvsp[0]).s);}
+  case 22:
+#line 93 "parse.y" /* yacc.c:1646  */
+    { functionDeriv((yyvsp[-2]).s, "cos", (yyvsp[-6]).s[0]); (yyval).s = resultString; }
 #line 1354 "parse.tab.c" /* yacc.c:1646  */
     break;
 
+  case 23:
+#line 95 "parse.y" /* yacc.c:1646  */
+    { functionDeriv((yyvsp[-2]).s, "tan", (yyvsp[-6]).s[0]); (yyval).s = resultString; }
+#line 1360 "parse.tab.c" /* yacc.c:1646  */
+    break;
 
-#line 1358 "parse.tab.c" /* yacc.c:1646  */
+  case 24:
+#line 97 "parse.y" /* yacc.c:1646  */
+    { derivative((yyvsp[-1]).s, (yyvsp[-3]).s[0]); (yyval).s = resultString; }
+#line 1366 "parse.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 25:
+#line 99 "parse.y" /* yacc.c:1646  */
+    { (yyval).s = "0"; }
+#line 1372 "parse.tab.c" /* yacc.c:1646  */
+    break;
+
+
+#line 1376 "parse.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1582,7 +1600,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 96 "parse.y" /* yacc.c:1906  */
+#line 101 "parse.y" /* yacc.c:1906  */
 
 
 double calcMod(double a,double b) {
@@ -1595,7 +1613,7 @@ double calcMod(double a,double b) {
 	return (double) (intA % intB);
 }
 
-void derivative(char * s) {
+void derivative(char * s, char ref) {
   	char * token;
   	char * nextToken;
   	char result[1024];
@@ -1613,63 +1631,136 @@ void derivative(char * s) {
     	char * coefString = NULL;
     	char * base = NULL;
     	char * expString = NULL;
+    	char variables[1024]; // Used to hold other variables no being derived
+    	memset(variables, 0, sizeof(variables));
+    	int negative = 0;
 
     	/* --------------------------------------------------------- */
-    	/* Break the string into 3 parts - coeficient, base, exponent */
+    	/* Break the string into 4 parts - coeficient, variables, base, exponent */
+    	if(strlen(token) > 1 && token[0] == '-') {
+    		negative = 1;
+    		token++;
+    	}
+
     	if(isdigit(token[0])) {
     		sscanf(token, "%lf", &coef);
 
     		//Remove the coefficient digits
-    		while(isdigit(token[0])) {
+    		while(isdigit(token[0]) && token[0] != '\0') {
     			token++;
     		}
 
-    		base = strtok_r(token , "^", &remaining);
-    		expString = remaining;
+    		//Remove variables not being derived
+    		int index = 0;
+    		while(token[0] != ref && token[0] != '\0') {
+    			variables[index] = token[0];
+    			token++;
+    			index++;
+    		}
+
+    		if(strlen(token) > 0) {
+    			base = strtok_r(token , "^", &remaining);
+    			expString = remaining;
+    		}
     	}
     	//No coefficient
     	else {
-    		base = strtok_r(token , "^", &expString);
+    		//Remove variables not being derived
+    		int index = 0;
+    		while(strlen(token) > 0 && token[0] != ref) {
+    			variables[index] = token[0];
+    			token++;
+    			index++;
+    		}
+
+    		if(strlen(token) > 0) {
+	    		base = strtok_r(token, "^", &expString);
+    		}
     	}
+
     	/* Done splitting string */
     	/* --------------------------------------------------------- */
-
+    	
     	/* --------------------------------------------------------- */
     	/* Convert strings to doubles */
-    	if(coefString != NULL) {
+    	if(coefString != NULL && strlen(coefString) > 0) {
     		coef = atof(coefString);
     	}
 
-    	if(strlen(expString) != 0) {
+    	if(base != NULL && strlen(base) > 0 && expString != NULL && strlen(expString) == 0) {
+    		exponent = 0;
+    	}
+    	else if(expString != NULL && strlen(expString) > 0) {
     		coef *= atof(expString);
     		exponent = atof(expString);
     		exponent -= 1;
     	}
     	/* Done splitting strings */
     	/* --------------------------------------------------------- */
-
+    	
     	/* --------------------------------------------------------- */
     	/* Make result string */
-    	if(strlen(base) != 0 ) {
-    		if(base[0] == '+' || base[0] == '-') {
-    			snprintf(individualTerm, sizeof(individualTerm), " %s ", base);
+    	if(base != NULL && strlen(base) > 0 ) {
+    		if(exponent != 0 && coef != 1) {
+    			if(exponent == 1) {
+    				snprintf(individualTerm, sizeof(individualTerm), "%G%s%s", coef, variables, base);
+    			}
+    			else {
+    				snprintf(individualTerm, sizeof(individualTerm), "%G%s%s^%G", coef, variables, base, exponent);
+    			}
     		}
-    		else if(exponent != 0 && coef != 1) {
-    			snprintf(individualTerm, sizeof(individualTerm), "%G%s^%G", coef, base, exponent);
+    		else if(exponent == 0 && coef != 1) {
+    			snprintf(individualTerm, sizeof(individualTerm), "%G%s", coef, variables);
     		}
-    		else if(exponent == 0) {
-    			snprintf(individualTerm, sizeof(individualTerm), "%G", coef);
+    		else if(exponent != 0 && coef == 1) {
+    			snprintf(individualTerm, sizeof(individualTerm), "%s%s^%G", variables, base, exponent);
     		}
-    		else if(coef == 1) {
-    			snprintf(individualTerm, sizeof(individualTerm), "%s^%G", base, exponent);
+    		else if(exponent == 0 && coef == 1) {
+    			if(strlen(variables) > 0)
+    				snprintf(individualTerm, sizeof(individualTerm), "%s", variables);
+    			else {
+    				snprintf(individualTerm, sizeof(individualTerm), "%s", "1");
+    			}
     		}
 	    	else {
 	    		printf("None\n");
 	    	}
 
     	}
+    	else {
+    		if(variables[0] == '+' || variables[0] == '-') {
+    			snprintf(individualTerm, sizeof(individualTerm), " %s ", variables);
+    		}
+    		else {
+    			individualTerm[0] = '\0';
+    			result[strlen(result) - 2] = '\0';
+    		}
+    	}
 
     	if(strlen(individualTerm) != 0) {
+    		//Double negative
+    		if(individualTerm[0] == '-') {
+    			int index = 0;
+    			while(individualTerm[index] != '\0') {
+    				individualTerm[index] = individualTerm[index + 1];
+    				index++;
+    			}
+
+    			if(negative) {
+    				negative = 0;
+    			}
+    			else
+    				negative = 1;
+    		}
+    		if(negative) {
+    			int end = strlen(result);
+    			if(result[end - 2] == '-') {
+    				result[end - 2] = '+';
+    			}
+    			else {
+    				result[end - 2] = '-';
+    			}
+    		}
     		strcat(result, individualTerm);
     	}
     	/* Done building result string */
@@ -1680,6 +1771,52 @@ void derivative(char * s) {
   	}
 
   	strncpy(resultString, result, 1024);
+}
+
+void functionDeriv(char * s, char * function, char ref) {
+	char * original = calloc(strlen(s), sizeof(char));
+	//Copy original string
+	strcpy(original, s);
+	//Get the derivative of the inner function
+	derivative(s, ref);
+
+	//Copy the derivative string
+	char * deriv = calloc(strlen(resultString), sizeof(char));
+	strcpy(deriv, resultString);
+
+	/* SIN */
+	if(strcmp(function, "sin") == 0) {
+		if(strlen(deriv) == 1 && deriv[0] == '1') {
+			snprintf(resultString, sizeof(resultString), "cos(%s)", original);
+		}
+		else if(strlen(deriv) > 0 && deriv[0] != '0') {
+			snprintf(resultString, sizeof(resultString), "(%s)cos(%s)", deriv, original);
+		}
+
+	}
+	/* COS */
+	else if(strcmp(function, "cos") == 0) {
+		if(strlen(deriv) == 1 && deriv[0] == '1') {
+			snprintf(resultString, sizeof(resultString), "-sin(%s)", original);
+		}
+		else if(strlen(deriv) > 0 && deriv[0] != '0') {
+			snprintf(resultString, sizeof(resultString), "-(%s)sin(%s)", deriv, original);
+		}
+
+	}
+	/* TAN */
+	else if(strcmp(function, "tan") == 0) {
+		if(strlen(deriv) == 1 && deriv[0] == '1') {
+			snprintf(resultString, sizeof(resultString), "sec^2(%s)", original);
+		}
+		else if(strlen(deriv) > 0 && deriv[0] != '0') {
+			snprintf(resultString, sizeof(resultString), "(%s)sec^2(%s)", deriv, original);
+		}
+
+	}
+
+
+
 }
 
 int main() 

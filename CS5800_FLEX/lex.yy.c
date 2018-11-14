@@ -475,10 +475,9 @@ char *yytext;
 	#include "parse.tab.h"
 	#include <math.h>
 
-
 	extern YYSTYPE yylval;
+#line 480 "lex.yy.c"
 #line 481 "lex.yy.c"
-#line 482 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -695,9 +694,9 @@ YY_DECL
 		}
 
 	{
-#line 18 "calc.l"
+#line 17 "calc.l"
 
-#line 701 "lex.yy.c"
+#line 700 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -756,91 +755,91 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 19 "calc.l"
+#line 18 "calc.l"
 { ; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 20 "calc.l"
+#line 19 "calc.l"
 return PLUS;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 21 "calc.l"
+#line 20 "calc.l"
 return MINUS;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 22 "calc.l"
+#line 21 "calc.l"
 return MULTIPLY;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 23 "calc.l"
+#line 22 "calc.l"
 return DIVIDE;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 24 "calc.l"
+#line 23 "calc.l"
 return MODULO;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 25 "calc.l"
+#line 24 "calc.l"
 return POWER;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 26 "calc.l"
+#line 25 "calc.l"
 return SIN;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 27 "calc.l"
+#line 26 "calc.l"
 return COS;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 28 "calc.l"
+#line 27 "calc.l"
 return TAN;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 29 "calc.l"
+#line 28 "calc.l"
 return LEFT_B;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 30 "calc.l"
+#line 29 "calc.l"
 return RIGHT_B;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 31 "calc.l"
+#line 30 "calc.l"
 { yylval.s = calloc( 1, sizeof(char)); yylval.s[0] = yytext[1]; return DERIV; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 32 "calc.l"
+#line 31 "calc.l"
 { sscanf( yytext, "%lf", &(yylval.num) ); return NUMBER; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 33 "calc.l"
+#line 32 "calc.l"
 { yylval.s = calloc(strlen(yytext)+1, sizeof(char)); strcpy(yylval.s, yytext); return STRING; }
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 34 "calc.l"
+#line 33 "calc.l"
 return EOLN;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 35 "calc.l"
+#line 34 "calc.l"
 ECHO;
 	YY_BREAK
-#line 844 "lex.yy.c"
+#line 843 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1845,5 +1844,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 35 "calc.l"
+#line 34 "calc.l"
 
