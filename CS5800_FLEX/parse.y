@@ -34,6 +34,7 @@ struct data_s {
 double calcMod(double a,double b);
 void derivative(char * s, char ref);
 void functionDeriv(char * s, char * function, char ref);
+void combineStruct(struct data_s * end, struct data_s * left, struct data_s * right, char * bin);
 
 int yylex();
 
@@ -46,13 +47,12 @@ char resultString[arraySize];
 %}
 
 %token EQUALS NUMBER POWER MODULO EOLN  
-%token SIN COS TAN CSC SEC COT 
+%token SIN COS TAN CSC SEC COT
+%token DERIV STRING ERROR
 %token LEFT_B RIGHT_B
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
 %right NOT
-
-%token DERIV STRING ERROR
 
 %%
 commands: 
@@ -111,14 +111,18 @@ derivative: primary
 	|
 	DERIV LEFT_B COT LEFT_B polynomial RIGHT_B RIGHT_B { functionDeriv($5.s, "cot", $1.s[0]); $$.s = resultString; }
 	|
-	DERIV LEFT_B polynomial RIGHT_B {printf("Poly %s\n", $2.s); derivative($1.s, $1.ref); $$.s = resultString; }
+	DERIV LEFT_B polynomial RIGHT_B { derivative($3.s, $1.s[0]); $$.s = resultString; }
 	|
 	DERIV LEFT_B NUMBER RIGHT_B {printf("Derivative number\n"); $$.s = "0"; }
 	;
 
 polynomial: primary
-	| polynomial PLUS primary { if($3.s != NULL){ printf("primary1 %s\n", $3.s);} else printf("primary1 %G\n", $3.num);}
-	| polynomial MINUS primary
+	| polynomial PLUS primary { 
+		combineStruct(&($$), &($1), &($3), " + ");
+	}
+	| polynomial MINUS primary {
+		combineStruct(&($$), &($1), &($3), " - ");
+	}
 	;
 
 primary: 
@@ -126,8 +130,6 @@ primary:
 	|
 	STRING { $$.s = calloc(strlen($1.s), sizeof(char)); strcpy($$.s, $1.s); printf("String %s\n", $$.s);}
 	;
-
-
 
 %%
 
@@ -161,12 +163,10 @@ void derivative(char * s, char ref) {
   	/* Break the given equation into tokens seperated by spaces */
   	token = strtok_r(s, " ", &nextToken);
 
-  	while (token != NULL)
-  	{
+  	while (token != NULL) {
     	double coef = 1;
     	double exponent = 0;
 
-    	//char * remaining = NULL;
     	char * coefString = calloc(arraySize, sizeof(char));
     	char * base = calloc(arraySize, sizeof(char));
     	char * expString = calloc(arraySize, sizeof(char));
@@ -249,6 +249,7 @@ void derivative(char * s, char ref) {
     			snprintf(individualTerm, arraySize, "%G%s", coef, variables);
     		}
     		else if(exponent != 0 && coef == 1) {
+    			printf("Here\n");
     			snprintf(individualTerm, arraySize, "%s%s^%G", variables, base, exponent);
     		}
     		else if(exponent == 0 && coef == 1) {
@@ -276,11 +277,7 @@ void derivative(char * s, char ref) {
     	if(strlen(individualTerm) != 0) {
     		//Double negative
     		if(individualTerm[0] == '-') {
-    			int index = 0;
-    			while(individualTerm[index] != '\0') {
-    				individualTerm[index] = individualTerm[index + 1];
-    				index++;
-    			}
+    			individualTerm++;
 
     			/* Flip negative */
     			if(negative) {
@@ -308,11 +305,19 @@ void derivative(char * s, char ref) {
     	/* Done building result string */
     	/* --------------------------------------------------------- */
 
+    	free(coefString);
+    	free(base);
+    	free(expString);
+    	free(variables);
+
     	//Get the next token
     	token = strtok_r(NULL, " ", &nextToken);
   	}
 
   	strncpy(resultString, result, arraySize);
+
+  	free(result);
+  	//free(individualTerm);
 }
 
 /**
@@ -385,6 +390,49 @@ void functionDeriv(char * s, char * function, char ref) {
 		}
 	}
 
+	free(original);
+	free(deriv);
+
+}
+
+/**
+ * Combined the left and right data into the end struct
+ * bin is used for the addition or subtraction
+ */
+void combineStruct(struct data_s * end, struct data_s * left, struct data_s * right, char * bin) {
+	//Allocate for string
+	end->s = calloc(arraySize, sizeof(char));
+
+	//Copy left data
+	if(left->s != NULL){ 
+		//printf("left string %s\n", left->s);
+		strcat(end->s, left->s);
+		strcat(end->s, bin);
+		free(left->s);
+	} 
+	else {
+		//printf("left number %G\n", left->num);
+		char * temp = calloc(arraySize, sizeof(char));
+		snprintf(temp, arraySize, "%G", left->num);
+		strcat(end->s, temp);
+		free(temp);
+	}
+
+	//Copy right data
+	if(right->s != NULL){ 
+		//printf("right string %s\n", right->s);
+		strcat(end->s, right->s);
+		free(right->s);
+	} 
+	else {
+		//printf("right number %G\n", right->num);
+		char * temp = calloc(arraySize, sizeof(char));
+		snprintf(temp, arraySize, "%G", right->num);
+		strcat(end->s, temp);
+		free(temp);
+	}
+
+	//printf("Final - %s\n", end->s);
 }
 
 int main() 

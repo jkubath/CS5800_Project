@@ -56,16 +56,16 @@ extern int yydebug;
     CSC = 266,
     SEC = 267,
     COT = 268,
-    LEFT_B = 269,
-    RIGHT_B = 270,
-    PLUS = 271,
-    MINUS = 272,
-    MULTIPLY = 273,
-    DIVIDE = 274,
-    NOT = 275,
-    DERIV = 276,
-    STRING = 277,
-    ERROR = 278
+    DERIV = 269,
+    STRING = 270,
+    ERROR = 271,
+    LEFT_B = 272,
+    RIGHT_B = 273,
+    PLUS = 274,
+    MINUS = 275,
+    MULTIPLY = 276,
+    DIVIDE = 277,
+    NOT = 278
   };
 #endif
 
