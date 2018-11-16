@@ -13,7 +13,7 @@ use:
 
 test: test.l test.y
 	flex test.l
-	bison -d -t test.y
+	bison -d -t -Wconflicts-sr test.y
 	gcc -o test lex.yy.c test.tab.c -lfl -lm
 
 clean:

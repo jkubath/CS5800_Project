@@ -15,7 +15,7 @@
 %}
 
 %% 
-[ \t] 	{ ; }
+[ \t\r]+  { /* eat up whitespace */ }
 "+"     return PLUS;
 "-"     return MINUS;
 "*" 	return MULTIPLY;
@@ -25,10 +25,13 @@
 "sin"	return SIN;
 "cos"	return COS;
 "tan"	return TAN;
+"csc"	return CSC;
+"sec"	return SEC;
+"cot"	return COT;
 "("		return LEFT_B;
 ")"		return RIGHT_B;
-"d"[a-z] 	{ yylval.s = calloc( 1, sizeof(char)); yylval.s[0] = yytext[1]; return DERIV; }
 [0-9.]+ { sscanf( yytext, "%lf", &(yylval.num) ); return NUMBER; }
-[a-zA-Z0-9.^+\-*\/ ]+ { yylval.s = calloc(strlen(yytext)+1, sizeof(char)); strcpy(yylval.s, yytext); return STRING; }
+"d"[a-z] 	{ yylval.s = calloc( 1, sizeof(char)); yylval.s[0] = yytext[1]; return DERIV; }
+[a-zA-Z0-9.^+\-*\/]+ { yylval.s = calloc(strlen(yytext)+1, sizeof(char)); strcpy(yylval.s, yytext); return STRING; }
 "\n" 	return EOLN;
 %%
