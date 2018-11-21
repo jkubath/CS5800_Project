@@ -8,11 +8,6 @@
 	Date: 11/09/2018
 */
 
-/*
-	Resources
-	http://www.gnu.org/software/bison/manual/html_node/Error-Recovery.html
-	https://www.ibm.com/developerworks/library/l-flexbison/index.html
-*/
 
 struct data_s {
 	char * s;
@@ -52,7 +47,6 @@ char resultString[arraySize];
 %token LEFT_B RIGHT_B
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
-%right NOT
 
 %%
 commands: 
@@ -62,14 +56,15 @@ commands:
 	| 
 	commands exp EOLN
 	{ 
-		if($2.s != NULL) {
-			printf("\t= %s\n", $2.s);
+		if($2.s != NULL && $2.s[0] != '\0') {
+			printf("\t= %s\n", $2.s); return 0;
 		}
-		else
+		else {
 			printf("\t= %g\n", $2.num); return 0;
+		}
 	}
 	|
-	commands error EOLN { printf("Input= %s\n", $2.s); return 0; }
+	commands error EOLN { $2.s[0] = '\0'; }
 	;
 
 exp: 	add_sub
@@ -78,6 +73,7 @@ exp: 	add_sub
 add_sub: mult_div
 	|	add_sub PLUS mult_div		{ $$.num = $1.num + $3.num; }
 	|	add_sub MINUS mult_div		{ $$.num = $1.num - $3.num; }
+	
 
 mult_div: power
 	|	mult_div MULTIPLY power		{ $$.num = $1.num * $3.num; }
@@ -113,7 +109,7 @@ derivative: primary
 	|
 	DERIV LEFT_B polynomial RIGHT_B { derivative($3.s, $1.s[0]); $$.s = resultString; }
 	|
-	DERIV LEFT_B NUMBER RIGHT_B {printf("Derivative number\n"); $$.s = "0"; }
+	DERIV LEFT_B NUMBER RIGHT_B { $$.s = "0"; }
 	;
 
 polynomial: primary
@@ -128,7 +124,9 @@ polynomial: primary
 primary: 
 	NUMBER { $$.num = $1.num; $$.s = NULL;}
 	|
-	STRING { $$.s = calloc(strlen($1.s), sizeof(char)); strcpy($$.s, $1.s); printf("String %s\n", $$.s);}
+	STRING { $$.s = calloc(strlen($1.s), sizeof(char)); strcpy($$.s, $1.s); }
+	|
+	LEFT_B add_sub RIGHT_B { $$.num = $2.num; }
 	;
 
 %%
@@ -314,9 +312,22 @@ void derivative(char * s, char ref) {
     	token = strtok_r(NULL, " ", &nextToken);
   	}
 
-  	strncpy(resultString, result, arraySize);
+  	if(result[0] == '\0') {
+  		//No string to copy
+  		resultString[0] = '\0';
+  	}
+  	else {
+	  	//Remove any numbers at the front that are null
+	  	while(!isalpha(result[0]) && !isdigit(result[0]) && result[0] != '-') {
+	  		result++;
+	  	}
 
-  	free(result);
+  		strncpy(resultString, result, arraySize);
+ 	}
+
+
+
+  	//free(result);
   	//free(individualTerm);
 }
 
@@ -415,6 +426,7 @@ void combineStruct(struct data_s * end, struct data_s * left, struct data_s * ri
 		char * temp = calloc(arraySize, sizeof(char));
 		snprintf(temp, arraySize, "%G", left->num);
 		strcat(end->s, temp);
+		strcat(end->s, bin);
 		free(temp);
 	}
 

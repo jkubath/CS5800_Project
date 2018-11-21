@@ -32,6 +32,6 @@
 ")"		return RIGHT_B;
 [0-9.]+ { sscanf( yytext, "%lf", &(yylval.num) ); return NUMBER; }
 "d"[a-z] 	{ yylval.s = calloc( 1, sizeof(char)); yylval.s[0] = yytext[1]; return DERIV; }
-[a-zA-Z0-9.^+\-*\/]+ { yylval.s = calloc(strlen(yytext)+1, sizeof(char)); strcpy(yylval.s, yytext); return STRING; }
+[a-zA-Z0-9.^-]+ { yylval.s = calloc(strlen(yytext)+1, sizeof(char)); strcpy(yylval.s, yytext); return STRING; }
 "\n" 	return EOLN;
 %%
