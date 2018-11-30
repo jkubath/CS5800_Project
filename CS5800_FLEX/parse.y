@@ -41,9 +41,10 @@ char resultString[arraySize];
 
 %}
 
-%token EQUALS NUMBER POWER MODULO EOLN  
+%token NUMBER EOLN STRING ERROR
+%token POWER MODULO  
 %token SIN COS TAN CSC SEC COT
-%token DERIV STRING ERROR
+%token DERIV
 %token LEFT_B RIGHT_B
 %left PLUS MINUS
 %left MULTIPLY DIVIDE

@@ -11,10 +11,5 @@ parse: parse.y
 use:
 	./calc
 
-test: test.l test.y
-	flex test.l
-	bison -d -t -Wconflicts-sr test.y
-	gcc -o test lex.yy.c test.tab.c -lfl -lm
-
 clean:
 	rm calc lex.yy.c parse.tab.c parse.tab.h
