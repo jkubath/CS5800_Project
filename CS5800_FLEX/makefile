@@ -1,5 +1,6 @@
+all: lex parse
 
-run: lex parse
+run: all
 	gcc -o calc lex.yy.c parse.tab.c -lfl -lm
 
 lex: calc.l
