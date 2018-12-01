@@ -8,8 +8,8 @@
 	#define YYSTYPE struct data_s
 	
 	#include <stdio.h>
+	//#include <math.h>
 	#include "parse.tab.h"
-	#include <math.h>
 
 	extern YYSTYPE yylval;
 %}

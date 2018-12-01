@@ -1,6 +1,6 @@
 %{
 /* 	CS5800 Final Project - Calculator
-	Summary: Calculator implementation using FLEX.
+	Summary: Calculator implementation using FLEX and Bison
 
 	Team Members:	Ioannis Nearchou
 					Jonah Kubath
@@ -135,7 +135,7 @@ primary:
 /**
  * Function for modulo of two doubles
  */
-double calcMod(double a,double b) {
+double calcMod(double a, double b) {
 	int intA = a;
 	int intB = b;
 	if (intA != (double) a || intB != (double) b) {
