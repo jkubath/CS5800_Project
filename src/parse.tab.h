@@ -45,11 +45,11 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    EQUALS = 258,
-    NUMBER = 259,
-    POWER = 260,
-    MODULO = 261,
-    EOLN = 262,
+    NUMBER = 258,
+    EOLN = 259,
+    STRING = 260,
+    POWER = 261,
+    MODULO = 262,
     SIN = 263,
     COS = 264,
     TAN = 265,
@@ -57,15 +57,12 @@ extern int yydebug;
     SEC = 267,
     COT = 268,
     DERIV = 269,
-    STRING = 270,
-    ERROR = 271,
-    LEFT_B = 272,
-    RIGHT_B = 273,
-    PLUS = 274,
-    MINUS = 275,
-    MULTIPLY = 276,
-    DIVIDE = 277,
-    NOT = 278
+    LEFT_B = 270,
+    RIGHT_B = 271,
+    PLUS = 272,
+    MINUS = 273,
+    MULTIPLY = 274,
+    DIVIDE = 275
   };
 #endif
 

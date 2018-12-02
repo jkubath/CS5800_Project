@@ -18,8 +18,6 @@ struct data_s {
 #define YYSTYPE struct data_s
 #define arraySize 1024
 
-#define YYERROR_VERBOSE 1
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -41,7 +39,7 @@ char resultString[arraySize];
 
 %}
 
-%token NUMBER EOLN STRING ERROR
+%token NUMBER EOLN STRING
 %token POWER MODULO  
 %token SIN COS TAN CSC SEC COT
 %token DERIV
@@ -94,9 +92,8 @@ function: derivative
 	TAN LEFT_B NUMBER RIGHT_B { $$.num = tanf($3.num); }
 	;
 
-derivative: primary
-	|
-	DERIV SIN LEFT_B polynomial RIGHT_B RIGHT_B { functionDeriv($5.s, "sin", $1.s[0]); $$.s = resultString; }
+derivative: 
+	DERIV LEFT_B SIN LEFT_B polynomial RIGHT_B RIGHT_B { functionDeriv($5.s, "sin", $1.s[0]); $$.s = resultString; }
 	|
 	DERIV LEFT_B COS LEFT_B polynomial RIGHT_B RIGHT_B { functionDeriv($5.s, "cos", $1.s[0]); $$.s = resultString; }
 	|
@@ -111,6 +108,8 @@ derivative: primary
 	DERIV LEFT_B polynomial RIGHT_B { derivative($3.s, $1.s[0]); $$.s = resultString; }
 	|
 	DERIV LEFT_B NUMBER RIGHT_B { $$.s = "0"; }
+	|
+	primary
 	;
 
 polynomial: primary
@@ -399,6 +398,22 @@ void functionDeriv(char * s, char * function, char ref) {
 		}
 		else if(strlen(deriv) > 0 && deriv[0] != '0') {
 			snprintf(resultString, arraySize, "(%s)sec(%s)tan(%s)", deriv, original, original);
+		}
+	}
+	/* COT */
+	else if(strcmp(function, "cot") == 0) {
+		if(strlen(deriv) == 1 && deriv[0] == '1') {
+			snprintf(resultString, arraySize, "-cot(%s)csc(%s)", original, original);
+		}
+		else if(strlen(deriv) > 0 && deriv[0] != '0') {
+			/* Double negative */
+			if(deriv[0] == '-') {
+				deriv++;
+				snprintf(resultString, arraySize, "(%s)cot(%s)csc(%s)", deriv, original, original);
+			}
+			else {
+				snprintf(resultString, arraySize, "-(%s)cot(%s)csc(%s)", deriv, original, original);
+			}
 		}
 	}
 
