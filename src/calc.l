@@ -3,7 +3,7 @@
 	struct data_s {
 		char * s;
 		double num;
-	} YYSTYPE;
+	};
 
 	#define YYSTYPE struct data_s
 	
@@ -15,6 +15,7 @@
 
 %% 
 [ \t\r]+  { /* eat up whitespace */ }
+"quit"	return QUIT;
 "+"     return PLUS;
 "-"     return MINUS;
 "*" 	return MULTIPLY;
@@ -33,4 +34,5 @@
 "d"[a-z] 	{ yylval.s = calloc( 1, sizeof(char)); yylval.s[0] = yytext[1]; return DERIV; }
 [a-zA-Z0-9.^-]+ { yylval.s = calloc(strlen(yytext)+1, sizeof(char)); strcpy(yylval.s, yytext); return STRING; }
 "\n" 	return EOLN;
+
 %%

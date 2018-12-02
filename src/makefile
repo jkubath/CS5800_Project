@@ -14,3 +14,6 @@ use:
 
 clean:
 	rm calc lex.yy.c parse.tab.c parse.tab.h
+
+test: all test.txt
+	./calc < test.txt

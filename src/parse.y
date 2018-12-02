@@ -13,7 +13,7 @@ struct data_s {
 	char * s;
 	double num;
 	char ref;
-} YYSTYPE;
+};
 
 #define YYSTYPE struct data_s
 #define arraySize 1024
@@ -39,7 +39,7 @@ char resultString[arraySize];
 
 %}
 
-%token NUMBER EOLN STRING
+%token NUMBER EOLN STRING QUIT
 %token POWER MODULO  
 %token SIN COS TAN CSC SEC COT
 %token DERIV
@@ -56,14 +56,19 @@ commands:
 	commands exp EOLN
 	{ 
 		if($2.s != NULL && $2.s[0] != '\0') {
-			printf("\t= %s\n", $2.s); return 0;
+			printf("\t= %s\n", $2.s);
+			$2.s[0] = '\0';
 		}
 		else {
-			printf("\t= %g\n", $2.num); return 0;
+			printf("\t= %g\n", $2.num);
 		}
+
+		resultString[0] = '\0';
 	}
 	|
 	commands error EOLN { $2.s[0] = '\0'; }
+	|
+	commands QUIT { return 0; }
 	;
 
 exp: 	add_sub
@@ -107,7 +112,7 @@ derivative:
 	|
 	DERIV LEFT_B polynomial RIGHT_B { derivative($3.s, $1.s[0]); $$.s = resultString; }
 	|
-	DERIV LEFT_B NUMBER RIGHT_B { $$.s = "0"; }
+	DERIV LEFT_B NUMBER RIGHT_B { $$.s[0] = '0'; $$.s[1] = '\0'; }
 	|
 	primary
 	;
@@ -314,7 +319,7 @@ void derivative(char * s, char ref) {
 
   	if(result[0] == '\0') {
   		//No string to copy
-  		resultString[0] = '\0';
+  		resultString[0] = '0'; resultString[1] = '\0';
   	}
   	else {
 	  	//Remove any numbers at the front that are null
